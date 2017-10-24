@@ -6,6 +6,11 @@ Microgateway exposes proxies deployed on Apigee Edge (that match edgemicro_* pro
 ## Scenario
 The proxy deployed in Apigee Edge is`edgemicro_sample`. The basePath is `/sample` and the target endpoint for dev is `http://api.sample1.com`, the target endpoint for test is `http://api.sample2.com`. We'll see how the plugin will help in this situation.
 
+## Copy the plugin
+Find the MG installation folder. 
+`cd <MG_INSTALL>\plugins`
+`git clone https://github.com/srinandan/router.git`
+
 ## Enable the plugin
 ```
   plugins:
@@ -35,5 +40,10 @@ router:
 
 ## Endpoint Lookup Implementation
 There are a variety of ways to implement the endpoint lookup. You can use external services like Eureka or Consul. In this example, I have used an Apigee proxy that stores endpoint information in a KVM. The format of the KVM (environment scoped) is `proxyname_revision` maps to `targetendpoint`. For ex: `edgemicro_sample` maps to `http://sample1.test.com`
+
+The api proxy implementation is included in the repo.
+
+### Create KVM
+The name of the KVM used by the proxy is `microgateway-router`. Here is the link to create one: https://docs.apigee.com/management/apis/post/organizations/%7Borg_name%7D/environments/%7Benv_name%7D/keyvaluemaps
 
 
