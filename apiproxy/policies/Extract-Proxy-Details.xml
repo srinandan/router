@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="Extract-Proxy-Details">
+    <DisplayName>Extract Proxy Details</DisplayName>
+    <Properties/>
+    <QueryParam name="proxyName">
+        <Pattern ignoreCase="true">{proxyName}</Pattern>
+    </QueryParam>
+    <QueryParam name="proxyRev">
+        <Pattern ignoreCase="true">{proxyRev}</Pattern>
+    </QueryParam>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Source clearPayload="false">request</Source>
+</ExtractVariables>
