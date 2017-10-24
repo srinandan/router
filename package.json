@@ -1,0 +1,24 @@
+{
+  "name": "router",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srinandan/router.git"
+  },
+  "author": "srinandans@google.com",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/srinandan/router/issues"
+  },
+  "homepage": "https://github.com/srinandan/router#readme",
+  "dependencies": {
+    "debug": "^3.1.0",
+    "request": "^2.83.0",
+    "volos-cache-memory": "^0.10.1"
+  }
+}
