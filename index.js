@@ -47,8 +47,14 @@ module.exports.init = function (config, logger, stats) {
 									debug("found endpoint " + endpoint.endpoint);
 									cache.set(key, endpoint.endpoint);
 									var parts = url.parse(endpoint.endpoint, true);
-									req.targetHostname = parts.hostname;
-									req.targetPort = parts.port;
+									if (parts.hostname.includes(":")) {
+										var result = parts.hostname.split(":");
+										req.targetHostname = result[0];
+										req.targetPort = result[1];
+									} else {
+										req.targetHostname = parts.hostname;
+										req.targetPort = parts.port;										
+									}
 									req.targetPath = parts.pathname + queryparams;									
 								}
 								else {
