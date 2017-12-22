@@ -48,12 +48,15 @@ module.exports.init = function (config, logger, stats) {
 									cache.set(key, endpoint.endpoint);
 									var parts = url.parse(endpoint.endpoint, true);
 									if (parts.hostname.includes(":")) {
+										debug("hostname: " + parts.hostname);
 										var result = parts.hostname.split(":");
 										req.targetHostname = result[0];
 										req.targetPort = result[1];
+										debug("target hostname: " + result[0] + " target port: " + result[1]);
 									} else {
 										req.targetHostname = parts.hostname;
-										req.targetPort = parts.port;										
+										req.targetPort = parts.port;
+										debug("target hostname: " + parts.hostname + " target port: " + parts.port);
 									}
 									req.targetPath = parts.pathname + queryparams;									
 								}
