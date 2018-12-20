@@ -29,51 +29,55 @@ module.exports.init = function (config, logger, stats) {
 				debug('plugin diabled');
 				next();
 			} else {
-				cache.get(key, function(err, value) {
-				    if (value) {
-				    	debug("found endpoint " + value);
-						//change endpoint
-						var parts = url.parse(value);
-						req.targetHostname = parts.host;
-						req.targetPort = parts.port;
-						req.targetPath = parts.pathname + queryparams;
-						next();
-				    } else {
-						debug("key not found in cache");
-						request(lookupEndpoint+"?proxyName="+proxyName+"&proxyRev="+proxyRev, function(error, response, body){
-							if (!err) {
-								var endpoint = JSON.parse(body);
-								if (endpoint.endpoint) {
-									debug("found endpoint " + endpoint.endpoint);
-									cache.set(key, endpoint.endpoint);
-									var parts = url.parse(endpoint.endpoint, true);
-									if (parts.hostname.includes(":")) {
-										debug("hostname: " + parts.hostname);
-										var result = parts.hostname.split(":");
-										req.targetHostname = result[0];
-										req.targetPort = result[1];
-										debug("target hostname: " + result[0] + " target port: " + result[1]);
-									} else {
-										req.targetHostname = parts.hostname;
-										req.targetPort = parts.port;
-										debug("target hostname: " + parts.hostname + " target port: " + parts.port);
+				try {
+					cache.get(key, function(err, value) {
+						if (value) {
+							debug("found endpoint " + value);
+							//change endpoint
+							var parts = url.parse(value);
+							req.targetHostname = parts.host;
+							req.targetPort = parts.port;
+							req.targetPath = parts.pathname + queryparams;
+							next();
+						} else {
+							debug("key not found in cache");
+							request(lookupEndpoint+"?proxyName="+proxyName+"&proxyRev="+proxyRev, function(error, response, body){
+								if (!err) {
+									var endpoint = JSON.parse(body);
+									if (endpoint.endpoint) {
+										debug("found endpoint " + endpoint.endpoint);
+										cache.set(key, endpoint.endpoint);
+										var parts = url.parse(endpoint.endpoint, true);
+										if (parts.hostname.includes(":")) {
+											debug("hostname: " + parts.hostname);
+											var result = parts.hostname.split(":");
+											req.targetHostname = result[0];
+											req.targetPort = result[1];
+											debug("target hostname: " + result[0] + " target port: " + result[1]);
+										} else {
+											req.targetHostname = parts.hostname;
+											req.targetPort = parts.port;
+											debug("target hostname: " + parts.hostname + " target port: " + parts.port);
+										}
+										req.targetPath = parts.pathname + queryparams;									
 									}
-									req.targetPath = parts.pathname + queryparams;									
-								}
-								else {
+									else {
+										debug("endpoint not found, using proxy endpoint");
+										cache.set(key, target);
+									}
+								} else {
+									debug(err);
 									debug("endpoint not found, using proxy endpoint");
 									cache.set(key, target);
 								}
-							} else {
-								debug(err);
-								debug("endpoint not found, using proxy endpoint");
-								cache.set(key, target);
-							}
-							next();
-						});			    	
-				    }
-				});
-				
+								next();
+							});			    	
+						}
+					});	
+				} catch (err) {
+					debug(err);
+					next();
+				}				
 			}			
 		}
 	}	
